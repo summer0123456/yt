@@ -1,6 +1,6 @@
 https://www.youtube.com/@MrBeast
 https://www.youtube.com/@kenforrest
-https://www.youtube.com/@CodeMonkeyUnity/videos
+https://www.youtube.com/@CodeMonkeyUnity
 https://www.youtube.com/@TheRoyalSkies
 https://www.youtube.com/@theAIsearch
 https://www.youtube.com/@AsmongoldClips
@@ -10,12 +10,12 @@ https://www.youtube.com/@GLITCH
 https://www.youtube.com/@Fireship
 https://www.youtube.com/@CaspianReport
 https://www.youtube.com/@TheFridayCheckout
-https://www.youtube.com/@Cascadeur/shorts
+https://www.youtube.com/@Cascadeur
 https://www.youtube.com/channel/UC7KbIaEOuY7H2j-cvhJ3mYA
 https://www.youtube.com/@gamefromscratch
 https://www.youtube.com/@CurtisHolt
 https://www.youtube.com/@mkbhd
-https://www.youtube.com/@johnnyharris/shorts
+https://www.youtube.com/@johnnyharris
 https://www.youtube.com/@christophe
 https://www.youtube.com/@1littlecoder
 https://www.youtube.com/@BlenderOfficial
@@ -32,3 +32,10 @@ https://www.youtube.com/@TheRoyalSkies
 https://www.youtube.com/@kurzgesagt
 https://www.youtube.com/@bycloudAI
 https://www.youtube.com/@git-amend
+https://www.youtube.com/@GameDevGuide
+https://www.youtube.com/@aiexplained-official
+https://www.youtube.com/@AronNemeth95
+https://www.youtube.com/@TechAltar
+https://www.youtube.com/@barj
+https://www.youtube.com/@CrashLandingStudio
+https://www.youtube.com/@UGuruz
