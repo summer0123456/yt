@@ -55,6 +55,86 @@ The agent relies on the following file structure within the repository:
 
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 🤖 AGENTS.md - YouTube Archiver Agent (VPS Edition)
+
+## 📌 Overview
+This document outlines the behavior and architecture of the **Automated YouTube Archiving Agent**. Optimized for 24/7 execution on a VPS within a JupyterLab environment, this agent autonomously monitors a channel watch list and processes manual "on-demand" video requests, backing everything up to GitHub Releases.
+
+---
+
+## ⚙️ How It Works (The Dual-Mode Pipeline)
+The agent operates in a continuous loop (30-minute intervals), performing the following logic:
+
+### 1. Mode A: On-Demand Requests (Priority)
+- **Source:** Scans `requestedvids.txt`.
+- **Bypass Logic:** To maximize speed and minimize resource usage, these videos **bypass `yt-dlp` metadata extraction**.
+- **Extraction:** Uses localized Regex to pull the 11-character Video ID directly from the URL.
+- **State:** These videos are **not** logged in `archived.txt`, allowing for repeated downloads if requested again.
+
+### 2. Mode B: Watch List Sync (Discovery)
+- **Source:** Reads `watch_list.txt`.
+- **Discovery:** Uses `yt-dlp` in "Flat Extraction" mode (metadata only) to check the latest **3** uploads per channel.
+- **Filtering:** 
+    - **Archive Check:** Consults `archived.txt`. If the ID exists, it is skipped.
+    - **Duration Check:** Skips any video longer than **2 hours** (7200s) to prevent API timeouts and massive file sizes.
+    - **Content Rule:** Strictly targets the `/videos` tab (skips Shorts and Live streams).
+
+### 3. Converting & Downloading (The API Bridge)
+- Instead of downloading directly (which often triggers YouTube rate limits on VPS IPs), the agent uses the **`hub.ytconvert.org` API**.
+- **Process:**
+    1. Sends a conversion request (720p/1080p MP4).
+    2. Polls a status URL until the conversion is "completed."
+    3. Streams the file directly from the conversion server to the VPS disk.
+- **Mid-Stream Safety:** If a file exceeds **1.95 GB** during the download, the agent aborts and deletes the partial file to ensure it fits within GitHub's 2GB Release limit.
+
+### 4. State Synchronization (Self-Healing Git)
+The agent manages its own repository state to ensure the VPS and GitHub never fall out of sync:
+- **Auto-Clear:** Once `requestedvids.txt` is processed, it is wiped clean.
+- **Conflict Resolution:** Uses `git pull --rebase --autostash`. If you edit the `watch_list.txt` on GitHub Web while the script is running, the agent will automatically merge those changes without crashing or requiring manual intervention.
+- **Commit Logic:** Updates `archived.txt` with new IDs and pushes the cleared `requestedvids.txt` back to the `main` branch.
+
+### 5. Cloud Backup & Cleanup
+- **Asset Upload:** All successful downloads are bundled into a timestamped GitHub Release (e.g., `v2026.05.06-123000`).
+- **Disk Management:** Immediately deletes all `.mp4`, `.mkv`, and `.webm` files after the upload (or if they are rejected for size) to prevent the VPS disk from filling up.
+
+---
+
+## 📂 Key Files
+*   **`watch_list.txt`**: List of channel URLs to monitor (User-managed).
+*   **`requestedvids.txt`**: List of specific video URLs to download immediately (User-managed).
+*   **`archived.txt`**: Database of previously downloaded watchlist videos (Machine-managed).
+*   **`archiver.log`**: Timestamped summary of every 30-minute cycle.
+
+---
+
+## 🛑 Logic Rules & Constraints
+*   **Release Limit:** Strictly **2.00 GB** per file (capped at 1.95 GB for safety).
+*   **Duration Limit:** Strictly **2 hours** per video.
+*   **Retry Logic:** 5 retries per video if the API returns an internal error.
+*   **Jupyter Optimization:** Uses `clear_output` every cycle to keep the browser tab responsive and prevent memory leaks in the Jupyter UI.
+
+---
+
+## 🛠️ Dependencies
+- `yt-dlp`: Used exclusively for flat metadata discovery.
+- `requests`: Used for API communication and file streaming.
+- `gh` CLI: Used for managing GitHub Releases.
+- `git`: Used for state management and database syncing.
+
 ## 🛠️ Required Dependencies
 - `yt-dlp` (Video processing and extraction)
 - `gh` CLI (GitHub releases management)
