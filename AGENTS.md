@@ -1,13 +1,4 @@
 
-
-
-Here is an `AGENTS.md` file that comprehensively explains the current architecture, workflow, and rules of your automated archiving project. 
-
-You can copy and paste this directly into your GitHub repository.
-
-***
-
-```markdown
 # 🤖 AGENTS.md - YouTube Archiver Agent
 
 ## 📌 Overview
@@ -68,4 +59,3 @@ The agent relies on the following file structure within the repository:
 - `yt-dlp` (Video processing and extraction)
 - `gh` CLI (GitHub releases management)
 - `nodejs` (To resolve YouTube extraction JavaScript runtime requirements)
-```
